@@ -1,0 +1,26 @@
+spring:
+  application:
+    name: drone-telemetry-service
+  grpc:
+    server:
+      port: 9091
+  datasource:
+    url: jdbc:postgresql://localhost:5432/aafo_telemetry
+    username: user
+    password: password
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: create
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: true
+server:
+  port: 8081
+
+logging:
+  level:
+    root: INFO
+    com.aafo.telemetry: DEBUG
+    io.grpc: WARN

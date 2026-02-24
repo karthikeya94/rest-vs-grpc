@@ -1,0 +1,76 @@
+type Query {
+    drone(droneId: ID!): Drone
+    drones(droneIds: [ID!]!): [Drone]
+    sector(sectorId: ID!): SectorData
+    sectors(sectorIds: [ID!]!): [SectorData]
+}
+
+# ─── Drone / Telemetry Types ───────────────────────────────────────────────────
+
+type Drone {
+    droneId: ID!
+    batteryLevel: Float
+    depthMeters: Float
+    status: String
+    coordinates: Coordinates
+    sensorData: [SensorReading]
+    signalDegradation: Float
+    # Nested topography and risk — resolved via DataLoader
+    sector: SectorData
+    riskScore: RiskScore
+}
+
+type Coordinates {
+    latitude: Float
+    longitude: Float
+    elevation: Float
+}
+
+type SensorReading {
+    sensorType: String
+    lastCalibrated: String
+    rawPayload: String
+}
+
+# ─── Sector / Topography Types ────────────────────────────────────────────────
+
+type SectorData {
+    sectorId: ID!
+    mappingResolution: String
+    topographyGrid: [Float]
+    thermalVents: [ThermalVent]
+    waterCurrents: [WaterCurrent]
+    minDepth: Float
+    maxDepth: Float
+}
+
+type ThermalVent {
+    ventId: ID
+    coordinates: Coordinates
+    temperatureCelsius: Float
+}
+
+type WaterCurrent {
+    vectorId: ID
+    directionDegrees: Int
+    velocityKnots: Float
+}
+
+# ─── Risk Score ───────────────────────────────────────────────────────────────
+
+type RiskScore {
+    droneId: ID
+    sectorId: String
+    score: Float
+    riskLevel: String
+    computationTimeMs: Int
+    factors: RiskFactors
+}
+
+type RiskFactors {
+    depthPressureIndex: Float
+    batteryRiskFactor: Float
+    thermalProximityRisk: Float
+    currentDriftRisk: Float
+    topographicCollisionRisk: Float
+}

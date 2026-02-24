@@ -1,0 +1,24 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: graphql-gateway-service
+  graphql:
+    graphiql.enabled: true
+
+downstream:
+  telemetry:
+    base-url: http://localhost:8081
+    grpc-host: localhost
+    grpc-port: 9091
+  topography:
+    base-url: http://localhost:8082
+    grpc-host: localhost
+    grpc-port: 9092
+
+logging:
+  level:
+    root: INFO
+    com.aafo.gateway: DEBUG
+    io.grpc: WARN

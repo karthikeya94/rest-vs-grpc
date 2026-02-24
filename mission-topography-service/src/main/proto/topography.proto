@@ -1,0 +1,79 @@
+syntax = "proto3";
+
+package com.aafo.topography;
+
+option java_package = "com.aafo.topography.grpc.proto";
+option java_outer_classname = "TopographyProto";
+option java_multiple_files = true;
+
+// ─────────────────────────────────────────────
+//  Shared Coordinates (re-defined per service)
+// ─────────────────────────────────────────────
+
+message TopoCoordinates {
+  double latitude  = 1;
+  double longitude = 2;
+  double elevation = 3;
+}
+
+// ─────────────────────────────────────────────
+//  Domain Messages
+// ─────────────────────────────────────────────
+
+message ThermalVent {
+  string         vent_id            = 1;
+  TopoCoordinates coordinates        = 2;
+  double         temperature_celsius = 3;
+}
+
+message WaterCurrent {
+  string vector_id        = 1;
+  int32  direction_degrees = 2;
+  double velocity_knots    = 3;
+}
+
+/**
+ * SectorMessage represents a full bathymetric sector.
+ * topography_grid carries 10,000+ depth data points to
+ * simulate massive payload pressure on the network layer.
+ */
+message SectorMessage {
+  string           sector_id         = 1;
+  string           mapping_resolution = 2;
+  // 10,000+ elevation data points
+  repeated double  topography_grid   = 3;
+  repeated ThermalVent thermal_vents  = 4;
+  repeated WaterCurrent water_currents = 5;
+  // Computed fields (min/max depths)
+  double           min_depth         = 6;
+  double           max_depth         = 7;
+}
+
+// ─────────────────────────────────────────────
+//  Requests / Responses
+// ─────────────────────────────────────────────
+
+message SectorRequest {
+  string sector_id = 1;
+}
+
+message GetSectorResponse {
+  SectorMessage sector = 1;
+}
+
+message BatchSectorRequest {
+  repeated string sector_ids = 1;
+}
+
+message GetBatchSectorResponse {
+  repeated SectorMessage sectors = 1;
+}
+
+// ─────────────────────────────────────────────
+//  Service Definition
+// ─────────────────────────────────────────────
+
+service TopographyService {
+  rpc GetSectorData (SectorRequest) returns (GetSectorResponse);
+  rpc GetBatchSectorData (BatchSectorRequest) returns (GetBatchSectorResponse);
+}

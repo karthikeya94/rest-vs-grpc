@@ -1,0 +1,64 @@
+syntax = "proto3";
+
+package com.aafo.telemetry;
+
+option java_package = "com.aafo.telemetry.grpc.proto";
+option java_outer_classname = "TelemetryProto";
+option java_multiple_files = true;
+
+// ─────────────────────────────────────────────
+//  Messages
+// ─────────────────────────────────────────────
+
+message Coordinates {
+  double latitude  = 1;
+  double longitude = 2;
+  double elevation = 3;
+}
+
+message SensorData {
+  string sensor_type    = 1;
+  int64  last_calibrated = 2;
+  // Intentionally large base64 sonar payload
+  string raw_payload    = 3;
+}
+
+message DroneStatusMessage {
+  string          drone_id       = 1;
+  double          battery_level  = 2;
+  double          depth_meters   = 3;
+  string          status         = 4;
+  Coordinates     coordinates    = 5;
+  repeated SensorData sensor_data = 6;
+  // Real-time computed field
+  double          signal_degradation = 7;
+}
+
+// ─────────────────────────────────────────────
+//  Requests / Responses
+// ─────────────────────────────────────────────
+
+message TelemetryRequest {
+  string drone_id = 1;
+}
+
+message TelemetryResponse {
+  DroneStatusMessage drone = 1;
+}
+
+message BatchTelemetryRequest {
+  repeated string drone_ids = 1;
+}
+
+message BatchTelemetryResponse {
+  repeated DroneStatusMessage drones = 1;
+}
+
+// ─────────────────────────────────────────────
+//  Service Definition
+// ─────────────────────────────────────────────
+
+service DroneTelemetryService {
+  rpc GetTelemetry (TelemetryRequest) returns (TelemetryResponse);
+  rpc GetBatchTelemetry (BatchTelemetryRequest) returns (BatchTelemetryResponse);
+}
