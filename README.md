@@ -16,14 +16,14 @@ This project utilizes **Java 21 Virtual Threads** to completely eliminate tradit
 The domain simulates mapping the ocean floor using a swarm of autonomous drones.
 
 1.  **GraphQL Gateway (Port 8080):** The orchestration node. Exposes `/graphql/web/rest` and `/graphql/web/grpc` endpoints.
-2.  **Telemetry Service (Port 8081 / gRPC 9091):** Manages high-frequency drone status, coordinates, and raw sensor payloads. Backed by MongoDB.
-3.  **Topography Service (Port 8082 / gRPC 9092):** Serves massive 3D mapping matrices and thermal vent data. Backed by MongoDB.
+2.  **Telemetry Service (Port 8081 / gRPC 9091):** Manages high-frequency drone status, coordinates, and raw sensor payloads. Backed by PostgreSQL.
+3.  **Topography Service (Port 8082 / gRPC 9092):** Serves massive 3D mapping matrices and thermal vent data. Backed by PostgreSQL.
 
 ## Prerequisites
 * **Java 21** & **Maven**
-* **MongoDB** (Running locally on default port `27017`)
+* **PostgreSQL** (Running locally on default port `5432`)
 * **Podman** or **Docker** (For running the k6 load tests)
-* **Grafana k6** (`podman pull grafana/k6`)
+* **Grafana k6**
 
 ## Quick Start
 
