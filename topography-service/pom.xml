@@ -13,7 +13,7 @@
     </parent>
 
     <groupId>com.aafo</groupId>
-    <artifactId>mission-topography-service</artifactId>
+    <artifactId>topography-service</artifactId>
     <version>1.0.0</version>
     <packaging>jar</packaging>
     <name>Mission Topography Service</name>
